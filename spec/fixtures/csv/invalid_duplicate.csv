@@ -1,0 +1,5 @@
+id,name[en],name[zh],description[en],description[zh],character_id,start_at,end_at
+1,NameEn1,NameZh1,DescEn1,DescEn2,100001,2022-09-01 00:00:00,2022-09-30 23:59:59
+2,NameEn2,NameZh2,DescEn2,DescEn2,100002,2022-09-01 00:00:00,2022-09-30 23:59:59
+3,NameEn3,NameZh3,DescEn3,DescEn3,100003,2022-09-01 00:00:00,2022-09-30 23:59:59
+2,NameEn4,NameZh4,DescEn4,DescEn4,100004,2022-09-01 00:00:00,2022-09-30 23:59:59
