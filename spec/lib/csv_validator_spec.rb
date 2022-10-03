@@ -74,10 +74,9 @@ RSpec.describe CsvValidator do
         it { is_expected.to be_falsey }
         it 'collected error messages of row(s) with field invalid by length limitation' do
           subject
-          expect(errors).to eq ["Length Limit Violation at name[en](20) in Row ID=2"]
+          expect(errors).to eq ['Length Limit Violation at name[en](20) in Row ID=2']
         end
       end
     end
   end
 end
-
