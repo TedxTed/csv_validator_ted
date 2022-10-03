@@ -7,12 +7,12 @@ class TableInfo
   attr_reader :localized_header_pattern, :timestamp_columns, :not_null_columns
 
   def initialize(schema)
+    # TODO, add any initialize process if you need
     @schema = schema
     @timestamp_columns = []
     @not_null_columns = []
     @limit_rules = []
     parse_schema(@schema)
-    # TODO, add any initialize process if you need
   end
 
   def length_limit_data(_headers)
