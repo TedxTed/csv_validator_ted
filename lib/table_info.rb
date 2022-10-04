@@ -15,12 +15,12 @@ class TableInfo
     parse_schema(@schema)
   end
 
-  def length_limit_data(_headers)
+  def length_limit_data(headers)
     # TODO
-    localized_header = _headers.select { |x| x.match(/\[/) }
+    localized_header = headers.select { |x| x.match(/\[/) }
     localized_header.each do |header|
       search = header.split('[')[0]
-      limit_num = @schema["#{search}"][:limit] || 255
+      limit_num = @schema[search][:limit] || 255
       @limit_rules << [header, limit_num]
     end
     @limit_rules
@@ -33,8 +33,7 @@ class TableInfo
     schema.each do |item|
       col_name = item[0]
       col_type = item[1][:type]
-      col_limit = item[1][:limit]
-      col_null  = item[1][:null]
+      col_null = item[1][:null]
       col_auto_increment = item[1][:auto_increment]
       col_default = item[1][:default]
 
@@ -43,8 +42,8 @@ class TableInfo
     end
   end
 
-  def null_col(name, _auto_increment, null, default)
-    @not_null_columns << name if null == false && !_auto_increment && default.nil?
+  def null_col(name, auto_increment, null, default)
+    @not_null_columns << name if null == false && !auto_increment && default.nil?
   end
 
   def timestamp_col(name, type)

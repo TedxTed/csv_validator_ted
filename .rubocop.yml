@@ -1,0 +1,10 @@
+# .rubocop.yml
+
+AllCops:
+  Exclude:
+    - spec/lib/*
+    - spec/*
+Style/Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false

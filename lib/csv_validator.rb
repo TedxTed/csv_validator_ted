@@ -7,7 +7,7 @@ require 'active_support/core_ext'
 class CsvValidator
   attr_reader :errors
 
-  def initialize(file_path, table_info, locales: [])
+  def initialize(file_path, table_info)
     @table_info = table_info
     @file_path = file_path
     @csv = CSV.table(file_path, { header_converters: ->(header) { header.to_s } })
@@ -26,49 +26,49 @@ class CsvValidator
       test_datetime_rule(row, @rule_timestamp_col)
       test_limit_rule(row, @rule_length_limit)
     end
-    !(@errors.length > 0)
+    @errors.length <= 0
   end
 
   # TODO, implement any private methods you need
   private
 
-  def test_empty(_data)
-    @errors << 'Empty Content' if _data.empty?
+  def test_empty(data)
+    @errors << 'Empty Content' if data.empty?
   end
 
-  def test_duplicate_id(_data)
-    repeat = _data['id'].select do |id|
-      _data['id'].count(id) > 1
+  def test_duplicate_id(data)
+    repeat = data['id'].select do |id|
+      data['id'].count(id) > 1
     end
     repeat.uniq.each do |id|
       @errors << "Duplicate Ids: [#{id}]"
     end
   end
 
-  def test_limit_rule(_data, test_col)
+  def test_limit_rule(data, test_col)
     test_col.each do |col|
       col_name = col[0]
       limit_length = col[1]
-      if _data[col_name].length > limit_length
-        @errors << "Length Limit Violation at #{col_name}(#{limit_length}) in Row ID=#{_data['id']}"
+      if data[col_name].length > limit_length
+        @errors << "Length Limit Violation at #{col_name}(#{limit_length}) in Row ID=#{data['id']}"
       end
     end
   end
 
-  def test_null_rule(_data, test_col)
+  def test_null_rule(data, test_col)
     test_col.each do |col|
-      @errors << "Not Null Violation at #{col} in Row ID=#{_data['id']}" if _data[col].nil?
+      @errors << "Not Null Violation at #{col} in Row ID=#{data['id']}" if data[col].nil?
     end
   end
 
-  def test_datetime_rule(_data, _test_col)
-    _test_col.each do |col|
-      next unless _data[col].present?
+  def test_datetime_rule(data, test_col)
+    test_col.each do |col|
+      next unless data[col].present?
 
       begin
-        DateTime.strptime("#{_data[col]}", '%Y-%m-%d %H:%M:%S')
+        DateTime.strptime(data[col], '%Y-%m-%d %H:%M:%S')
       rescue StandardError
-        @errors << "Time Format Violation at #{col} in Row ID=#{_data['id']}"
+        @errors << "Time Format Violation at #{col} in Row ID=#{data['id']}"
       end
     end
   end
