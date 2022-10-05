@@ -8,13 +8,11 @@ class CsvValidator
   attr_reader :errors
 
   def initialize(file_path, table_info)
-    @table_info = table_info
-    @file_path = file_path
     @csv = CSV.table(file_path, { header_converters: ->(header) { header.to_s } })
     @errors = []
-    @rule_null_col = @table_info.not_null_columns
-    @rule_timestamp_col = @table_info.timestamp_columns
-    @rule_length_limit = @table_info.length_limit_data(@csv.headers)
+    @rule_null_col ||= table_info.not_null_columns
+    @rule_timestamp_col ||= table_info.timestamp_columns
+    @rule_length_limit ||= table_info.length_limit_data(@csv.headers)
     # TODO, add any initialize process if you need
   end
 
@@ -26,7 +24,7 @@ class CsvValidator
       test_datetime_rule(row, @rule_timestamp_col)
       test_limit_rule(row, @rule_length_limit)
     end
-    @errors.length <= 0
+    @errors.empty?
   end
 
   # TODO, implement any private methods you need
